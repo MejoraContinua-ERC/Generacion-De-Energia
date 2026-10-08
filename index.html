@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Generación de Energía · ERC</title>
+<meta name="theme-color" content="#004B87">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="erc-app-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="erc-app-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Generación ERC">
 <style>
   :root{--navy:#004B87;--celeste:#00A9E0;--ink:#0A3A63;--muted:#5E7C97;--line:#D5E2ED;
     --bg:#EDF4FA;--card:#FFFFFF;--gen:#00A9E0;--proy:#004B87;--gen-soft:#D3EEFA;--ring-track:#DCE8F2;--hl:#E9F7FD}
@@ -408,5 +415,6 @@ render();
 fetch("datos.json").then(r=>r.ok?r.json():null).then(d=>{if(d){DATA=d;selMi=lastWithData(sel,year);msel.value=selMi;render();}}).catch(()=>{});
 
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js');});}</script>
 </body>
 </html>

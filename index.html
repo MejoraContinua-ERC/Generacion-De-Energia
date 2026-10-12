@@ -118,6 +118,7 @@
       <div class="lbl" id="heroLbl">Generado en el año</div>
       <div class="big"><span id="genYTD">0</span><span class="unit">MWh</span></div>
       <div class="sub" id="heroSub"></div>
+      <div class="sub" id="heroAA"></div>
     </div>
     <div class="ring">
       <svg width="92" height="92" viewBox="0 0 92 92">
@@ -140,7 +141,7 @@
         <circle cx="46" cy="46" r="40" fill="none" stroke="var(--ring-track)" stroke-width="9"/>
         <circle id="ringFill2" cx="46" cy="46" r="40" fill="none" stroke="var(--celeste)" stroke-width="9" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
       </svg>
-      <div class="pct"><b id="avance">0%</b><span>avance del año</span></div>
+      <div class="pct"><b id="avance">0%</b><span>avance<br>del año</span></div>
     </div>
   </div>
 
@@ -159,18 +160,6 @@
   <div class="card">
     <div class="cardhd"><h2>Acumulado: Generado vs. Proyectado</h2></div>
     <div class="chartbox"><canvas id="cum"></canvas></div>
-  </div>
-
-  <div class="card hide" id="compCard">
-    <div class="cardhd"><div><h2>Energía Generada vs. Comprometida</h2><div class="csub" id="compSub">Oxec y Oxec II</div></div></div>
-    <div class="comp">
-      <div class="comprow"><span class="t" id="cDiaTit">Diaria</span>
-        <span class="n"><b id="cDiaG">–</b><i>MWh generado</i></span><span class="n"><b id="cDiaC">–</b><i>MWh comprometido</i></span><span class="n"><b id="cDiaP">–</b><i>cobertura</i></span></div>
-      <div class="comprow"><span class="t" id="cMesTit">Mensual</span>
-        <span class="n"><b id="cMesG">–</b><i>MWh generado</i></span><span class="n"><b id="cMesC">–</b><i>MWh comprometido</i></span><span class="n"><b id="cMesP">–</b><i>cobertura</i></span></div>
-      <div class="comprow"><span class="t">Anual</span>
-        <span class="n"><b id="cAnoG">–</b><i>MWh generado</i></span><span class="n"><b id="cAnoC">–</b><i>MWh comprometido</i></span><span class="n"><b id="cAnoP">–</b><i>cobertura</i></span></div>
-    </div>
   </div>
 
   <div class="card hide" id="partCard">
@@ -255,6 +244,7 @@ function monthAgg(sel,y){
 }
 function lastWithData(sel,y){const r=monthAgg(sel,y);let i=r.map(x=>x.gen>0).lastIndexOf(true);return i<0?0:i;}
 function lastDay(sel,y){for(let m=11;m>=0;m--){const dr=dayRows(sel,y,m);for(let i=dr.length-1;i>=0;i--){if(dr[i].g!=null&&dr[i].g>0)return Object.assign({mi:m},dr[i]);}}return null;}
+function genAA(sel,py,cut){if(!cut||!DATA[PLANTS[0]][py])return null;let tot=0;for(let m=0;m<=cut.mi;m++){dayRows(sel,py,m).forEach(function(x){if((m<cut.mi||x.d<=cut.d)&&x.g!=null)tot+=x.g;});}return tot;}
 function hasComp(sel,y){return monthAgg(sel,y).some(x=>x.comp>0);}
 
 function render(){
@@ -272,6 +262,8 @@ function render(){
   gRingPct.textContent=Math.round(pctMeta*100)+"%";
   gRingFill.setAttribute("stroke-dashoffset",251.3*(1-Math.min(pctMeta,1)));
   gHeroSub.textContent="Meta a la fecha: "+mwh(proyPer);
+  var _cut=lastDay("TODAS",year),_py=String(parseInt(year)-1),_aa=genAA(sel,_py,_cut);
+  if(_aa==null){gHeroAA.style.display="none";}else{gHeroAA.style.display="";gHeroAA.textContent="Generado AA: "+mwh(_aa);}
   gProyAnual.textContent=fmt(proyAnual);
   gAvance.textContent=Math.round(pctAnual*100)+"%";
   gRingFill2.setAttribute("stroke-dashoffset",251.3*(1-Math.min(pctAnual,1)));
@@ -285,7 +277,7 @@ function render(){
   kMesLbl.textContent="Mes de "+MESL[selMi];
   kMesGen.textContent=fmt(md.gen);kMesProy.textContent=fmt(md.proy);kMesPct.textContent=(md.proy?Math.round(md.gen/md.proy*100):0)+"%";
 
-  renderComp(r,genY,ld);
+  
   renderBars(r); renderCum(r); renderPart();
   renderDaily();
 }
@@ -393,7 +385,7 @@ const gHeroLbl=document.getElementById("heroLbl"),gGenY=document.getElementById(
  cMesG=document.getElementById("cMesG"),cMesC=document.getElementById("cMesC"),cMesP=document.getElementById("cMesP"),
  cAnoG=document.getElementById("cAnoG"),cAnoC=document.getElementById("cAnoC"),cAnoP=document.getElementById("cAnoP"),
  partCard=document.getElementById("partCard"),partTit=document.getElementById("partTit"),gPart=document.getElementById("part"),
- dayHead=document.getElementById("dayHead"),dayBody=document.getElementById("dayBody"),daySum=document.getElementById("daySum"),gPick=document.getElementById("pick");
+ dayHead=document.getElementById("dayHead"),dayBody=document.getElementById("dayBody"),daySum=document.getElementById("daySum"),gPick=document.getElementById("pick"),gHeroAA=document.getElementById("heroAA");
 
 
 function setTip(id){

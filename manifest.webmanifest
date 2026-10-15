@@ -1,7 +1,7 @@
 {
   "id": "./?app=generacion-erc",
   "name": "Generación ERC",
-  "short_name": "Generación",
+  "short_name": "Generación ERC",
   "description": "Generado con IA (Claude - ERC AI Workspace) - Restringido. Tablero de generación de energía de ERC.",
   "lang": "es-GT",
   "start_url": "inicio.html",

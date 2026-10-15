@@ -1,5 +1,5 @@
 // Generado con IA (Claude - ERC AI Workspace) - Restringido
-const VERSION = 'generacion-erc-v1';
+const VERSION = 'generacion-erc-v2';
 const SHELL = [
   './', './index.html', './inicio.html', './manifest.webmanifest',
   './logo-erc.png', './oxec-ii.jpg',
